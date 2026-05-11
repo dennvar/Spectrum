@@ -1,0 +1,649 @@
+/* =========================================================
+   Spectrum — Global Styles
+   ========================================================= */
+
+:root {
+  --left-color:  #3a7bd5;
+  --left-glow:   #3a7bd540;
+  --right-color: #e85d04;
+  --right-glow:  #e85d0440;
+  --accent:      #c084fc;
+  --accent-glow: #c084fc40;
+  --surface:     #1e1e2e;
+  --surface2:    #2a2a3e;
+  --border:      #3a3a55;
+  --text:        #e8e8f0;
+  --muted:       #9ca3af;
+  --error:       #f87171;
+  --success:     #4ade80;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  min-height: 100vh;
+  background: #0f0f1a;
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+body {
+  padding: 1rem;
+}
+
+/* =========================================================
+   Screens
+   ========================================================= */
+
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 480px;
+  padding-bottom: 2rem;
+}
+
+.screen.active {
+  display: flex;
+  animation: fadeSlideIn 0.22s ease;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================
+   Typography
+   ========================================================= */
+
+.game-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--left-color), var(--accent), var(--right-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-top: 1rem;
+}
+
+.instruction {
+  font-size: 1rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.status-text {
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
+  text-align: center;
+}
+
+.error-text {
+  color: var(--error);
+  font-size: 0.9rem;
+  min-height: 1.2em;
+  text-align: center;
+}
+
+/* =========================================================
+   Cards & Panels
+   ========================================================= */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.75rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.divider {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  padding: 0.25rem 0;
+}
+
+.action-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+/* =========================================================
+   Inputs
+   ========================================================= */
+
+input[type="text"] {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+input[type="text"]:focus {
+  border-color: var(--accent);
+}
+
+input[type="text"]::placeholder {
+  color: var(--muted);
+}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+
+button {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 9px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  background: var(--accent);
+  color: #fff;
+}
+
+button:hover  { opacity: 0.88; }
+button:active { transform: scale(0.97); }
+
+.btn-secondary {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-direction {
+  width: auto;
+  flex: 1;
+  font-size: 1.05rem;
+  padding: 0.85rem 1.5rem;
+}
+
+.btn-left  { background: var(--left-color);  }
+.btn-right { background: var(--right-color); }
+
+.direction-buttons {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* =========================================================
+   Team name editor (host-only, shown in lobby)
+   ========================================================= */
+
+.team-name-editor {
+  width: 100%;
+}
+
+.team-name-row {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.team-name-row input { flex: 1; }
+
+/* =========================================================
+   Lobby
+   ========================================================= */
+
+.lobby-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}
+
+.score-display {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.teams-container {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.team-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 0.5rem;
+  min-width: 0;
+}
+
+.team-heading {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.team-heading.left  { color: var(--left-color);  }
+.team-heading.right { color: var(--right-color); }
+
+.player-list {
+  list-style: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.player-list li {
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 0.3rem 0.4rem;
+  border-radius: 6px;
+  background: var(--surface2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-list li.disconnected {
+  opacity: 0.45;
+  font-style: italic;
+}
+
+.host-controls {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.host-controls button {
+  flex: 1;
+}
+
+/* =========================================================
+   Round info & badges
+   ========================================================= */
+
+.round-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.round-badge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.team-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+}
+
+.team-badge.left  { background: var(--left-glow);  color: var(--left-color);  border: 1px solid var(--left-color);  }
+.team-badge.right { background: var(--right-glow); color: var(--right-color); border: 1px solid var(--right-color); }
+
+/* =========================================================
+   Spectrum bar
+   ========================================================= */
+
+.spectrum-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 280px;
+  padding: 0.4rem 0;
+  border-bottom: 2px solid var(--border);
+}
+
+.spectrum-label {
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* =========================================================
+   In-game score bar
+   ========================================================= */
+
+.ingame-scorebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.45rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.ingame-scorebar .isb-left  { color: var(--left-color);  }
+.ingame-scorebar .isb-right { color: var(--right-color); }
+
+.ingame-scorebar strong {
+  font-size: 1.15rem;
+  margin-left: 0.2rem;
+}
+
+/* =========================================================
+   Dial
+   ========================================================= */
+
+.dial-wrapper {
+  position: relative;
+  width: 280px;
+  height: 150px; /* 140px semicircle + 10px so center dot isn't clipped */
+}
+
+.dial {
+  position: relative;
+  width: 280px;
+  height: 140px;
+  border-radius: 140px 140px 0 0; /* dome — flat base at bottom */
+  background: radial-gradient(circle at 50% 100%, #252538 0%, #1a1a2e 100%);
+  border: 3px solid var(--border);
+  border-bottom: none;
+  touch-action: none;
+  user-select: none;
+  overflow: visible; /* center dot straddles the flat edge */
+}
+
+/* SVG scoring zone arcs — filled/stroked by JS at reveal time */
+.dial-zones {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.zone-arc {
+  fill: none;
+  stroke-width: 22;
+  stroke-linecap: butt;
+}
+
+.zone-1pt { stroke: rgba(250, 204,  21, 0.10); }
+.zone-2pt { stroke: rgba(250, 204,  21, 0.18); }
+.zone-3pt { stroke: rgba(250, 204,  21, 0.30); }
+.zone-4pt { stroke: rgba(250, 204,  21, 0.50); }
+
+/* Needle — pivots from the flat base (bottom: 0) upward into the arc */
+.dial-needle {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  height: 88%; /* same physical length as before: 88% of 140px ≈ 123px */
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(calc(var(--angle, 0) * 1deg));
+  border-radius: 4px 4px 0 0;
+  transition: transform 0.18s ease;
+  pointer-events: none;
+}
+
+.guess-needle  {
+  background: #facc15;
+  box-shadow: 0 0 8px #facc1580;
+  z-index: 2;
+}
+
+.target-needle {
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+  z-index: 3;
+  width: 5px;
+}
+
+/* Centre dot — sits at the flat base, marking the pivot */
+.dial-center-dot {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--border);
+  bottom: -7px; /* half its height, so it straddles the flat edge */
+  top: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Opposing arrow sits at the top of the dial */
+.opposing-arrow {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.8rem;
+  line-height: 1;
+  z-index: 4;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+/* =========================================================
+   Hint display (guessing / opposing screens)
+   ========================================================= */
+
+.hint-display {
+  font-size: 1.1rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.hint-display strong {
+  color: var(--text);
+  font-size: 1.3rem;
+}
+
+.position-readout {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.position-readout strong {
+  color: var(--text);
+  font-size: 1.1rem;
+}
+
+/* =========================================================
+   Score breakdown (reveal screen)
+   ========================================================= */
+
+.reveal-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.score-breakdown {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.score-value {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.totals-bar {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.total-left  { color: var(--left-color);  }
+.total-right { color: var(--right-color); }
+
+.total-left  strong,
+.total-right strong {
+  font-size: 1.4rem;
+}
+
+/* =========================================================
+   Game Over screen
+   ========================================================= */
+
+.winner-title {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.final-scores {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.final-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.final-team h3 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.final-team.left  h3 { color: var(--left-color);  }
+.final-team.right h3 { color: var(--right-color); }
+
+.big-score {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.final-team.left  .big-score { color: var(--left-color);  }
+.final-team.right .big-score { color: var(--right-color); }
+
+/* =========================================================
+   Toast
+   ========================================================= */
+
+.toast {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: #fff;
+  padding: 0.6rem 1.5rem;
+  border-radius: 9px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  z-index: 1000;
+  animation: fadeSlideIn 0.2s ease;
+  white-space: nowrap;
+  max-width: 90vw;
+}
+
+/* =========================================================
+   Utilities
+   ========================================================= */
+
+.hidden { display: none !important; }
+
+/* =========================================================
+   Responsive tweaks
+   ========================================================= */
+
+@media (max-width: 380px) {
+  .dial-wrapper {
+    width: 240px;
+    height: 130px;
+  }
+  .dial {
+    width: 240px;
+    height: 120px;
+    border-radius: 120px 120px 0 0;
+  }
+  .spectrum-bar { width: 240px; }
+  .direction-buttons { flex-direction: column; }
+  .game-title { font-size: 2.2rem; }
+}
+
+
+/* Fan-project footer */
+.fan-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.25);
+  padding: 0.35rem 1rem;
+  pointer-events: none;
+  user-select: none;
+}

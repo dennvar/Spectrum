@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spectrum</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- ─── Screen 1: Join ─────────────────────────────────────────── -->
+  <div class="screen active" id="screen-join">
+    <h1 class="game-title">Spectrum</h1>
+    <div class="card">
+      <label for="input-name">Your name</label>
+      <input type="text" id="input-name" placeholder="Enter your name" maxlength="20" autocomplete="off">
+      <button id="btn-create">Create Room</button>
+      <div class="divider">— or join an existing room —</div>
+      <input type="text" id="input-room-code" placeholder="Room code (e.g. WXYZ)" maxlength="4"
+             autocomplete="off" style="text-transform:uppercase">
+      <button id="btn-join" class="btn-secondary">Join Room</button>
+    </div>
+    <p id="join-error" class="error-text"></p>
+  </div>
+
+  <!-- ─── Screen 2: Lobby ───────────────────────────────────────── -->
+  <div class="screen" id="screen-lobby">
+    <div class="lobby-header">
+      <span>Room: <strong id="lobby-room-code"></strong></span>
+      <span id="lobby-scores" class="score-display"></span>
+    </div>
+
+    <!-- Host-only: rename teams -->
+    <div id="team-name-editor" class="team-name-editor hidden">
+      <div class="team-name-row">
+        <input type="text" id="input-left-name"  placeholder="Left team name"  maxlength="20" autocomplete="off">
+        <input type="text" id="input-right-name" placeholder="Right team name" maxlength="20" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="teams-container">
+      <div class="team-column">
+        <h3 id="lobby-heading-left"  class="team-heading left">Left</h3>
+        <ul id="lobby-players-left" class="player-list"></ul>
+      </div>
+      <div class="team-column">
+        <h3 id="lobby-heading-right" class="team-heading right">Right</h3>
+        <ul id="lobby-players-right" class="player-list"></ul>
+      </div>
+      <div class="team-column">
+        <h3 class="team-heading">Unassigned</h3>
+        <ul id="lobby-players-unassigned" class="player-list"></ul>
+      </div>
+    </div>
+
+    <div id="host-controls" class="host-controls hidden">
+      <button id="btn-auto-assign" class="btn-secondary">Auto-Assign Teams</button>
+      <button id="btn-start-game">Start Game</button>
+    </div>
+    <p id="lobby-status" class="status-text">Waiting for host to start…</p>
+  </div>
+
+  <!-- ─── Screen 3: Giving Hint ─────────────────────────────────── -->
+  <div class="screen" id="screen-giving-hint">
+    <div class="round-info">
+      <span id="hint-round-num" class="round-badge">Round 1</span>
+      <span id="hint-current-team" class="team-badge"></span>
+    </div>
+
+    <div class="ingame-scorebar">
+      <span class="isb-left"><span id="hint-label-left">Left</span>: <strong id="hint-score-left">0</strong></span>
+      <span class="isb-right"><span id="hint-label-right">Right</span>: <strong id="hint-score-right">0</strong></span>
+    </div>
+
+    <div class="spectrum-bar">
+      <span id="hint-spectrum-left" class="spectrum-label"></span>
+      <span id="hint-spectrum-right" class="spectrum-label"></span>
+    </div>
+
+    <div class="dial-wrapper">
+      <div class="dial" id="hint-dial">
+        <svg class="dial-zones" viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg">
+          <!-- decorative zone arcs, always centred at position 50 -->
+          <path class="zone-arc zone-1pt"  d=""/>
+          <path class="zone-arc zone-2pt"  d=""/>
+          <path class="zone-arc zone-3pt"  d=""/>
+          <path class="zone-arc zone-4pt"  d=""/>
+        </svg>
+        <div class="dial-needle target-needle hidden" id="hint-target-needle"></div>
+        <div class="dial-center-dot"></div>
+      </div>
+    </div>
+
+    <div id="psychic-hint-input" class="action-panel hidden">
+      <p class="instruction">
+        You are the Psychic! The target is at
+        <strong id="target-position-label"></strong>%
+      </p>
+      <input type="text" id="input-hint" placeholder="Give a one-word clue…" maxlength="50" autocomplete="off">
+      <button id="btn-submit-hint">Submit Hint</button>
+    </div>
+
+    <div id="waiting-hint" class="action-panel hidden">
+      <p class="instruction">Waiting for the psychic to give a clue…</p>
+      <p id="psychic-name-hint" class="status-text"></p>
+    </div>
+  </div>
+
+  <!-- ─── Screen 4: Guessing ────────────────────────────────────── -->
+  <div class="screen" id="screen-guessing">
+    <div class="round-info">
+      <span id="guess-round-num" class="round-badge">Round 1</span>
+      <span id="guess-current-team" class="team-badge"></span>
+    </div>
+
+    <div class="ingame-scorebar">
+      <span class="isb-left"><span id="guess-label-left">Left</span>: <strong id="guess-score-left">0</strong></span>
+      <span class="isb-right"><span id="guess-label-right">Right</span>: <strong id="guess-score-right">0</strong></span>
+    </div>
+
+    <div class="hint-display">
+      Clue: <strong id="guess-hint-text"></strong>
+    </div>
+
+    <div class="spectrum-bar">
+      <span id="guess-spectrum-left" class="spectrum-label"></span>
+      <span id="guess-spectrum-right" class="spectrum-label"></span>
+    </div>
+
+    <div class="dial-wrapper">
+      <div class="dial" id="guess-dial">
+        <svg class="dial-zones" viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg">
+          <path class="zone-arc zone-1pt"  d=""/>
+          <path class="zone-arc zone-2pt"  d=""/>
+          <path class="zone-arc zone-3pt"  d=""/>
+          <path class="zone-arc zone-4pt"  d=""/>
+        </svg>
+        <div class="dial-needle guess-needle" id="guess-needle"></div>
+        <div class="dial-center-dot"></div>
+      </div>
+    </div>
+
+    <div id="guesser-controls" class="action-panel hidden">
+      <p class="instruction">Drag the dial to your team's best guess</p>
+      <p class="position-readout">Position: <strong id="guess-position-display">50</strong></p>
+      <button id="btn-submit-guess">Lock In Guess</button>
+    </div>
+
+    <div id="waiting-guess" class="action-panel hidden">
+      <p class="instruction">Waiting for the active team to place their guess…</p>
+    </div>
+  </div>
+
+  <!-- ─── Screen 5: Opposing Guess ──────────────────────────────── -->
+  <div class="screen" id="screen-opposing">
+    <div class="round-info">
+      <span id="opp-round-num" class="round-badge">Round 1</span>
+    </div>
+
+    <div class="ingame-scorebar">
+      <span class="isb-left"><span id="opp-label-left">Left</span>: <strong id="opp-score-left">0</strong></span>
+      <span class="isb-right"><span id="opp-label-right">Right</span>: <strong id="opp-score-right">0</strong></span>
+    </div>
+
+    <div class="hint-display">
+      Clue: <strong id="opp-hint-text"></strong>
+    </div>
+
+    <div class="spectrum-bar">
+      <span id="opp-spectrum-left" class="spectrum-label"></span>
+      <span id="opp-spectrum-right" class="spectrum-label"></span>
+    </div>
+
+    <div class="dial-wrapper">
+      <div class="dial" id="opp-dial">
+        <svg class="dial-zones" viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg">
+          <path class="zone-arc zone-1pt"  d=""/>
+          <path class="zone-arc zone-2pt"  d=""/>
+          <path class="zone-arc zone-3pt"  d=""/>
+          <path class="zone-arc zone-4pt"  d=""/>
+        </svg>
+        <div class="dial-needle guess-needle" id="opp-guess-needle"></div>
+        <div class="dial-center-dot"></div>
+      </div>
+    </div>
+
+    <div id="opposing-controls" class="action-panel hidden">
+      <p class="instruction">Is the target <em>left</em> or <em>right</em> of the needle?</p>
+      <div class="direction-buttons">
+        <button id="btn-guess-left"  class="btn-direction btn-left">← Left</button>
+        <button id="btn-guess-right" class="btn-direction btn-right">Right →</button>
+      </div>
+    </div>
+
+    <div id="waiting-opposing" class="action-panel hidden">
+      <p class="instruction">Waiting for the opposing team to call a direction…</p>
+    </div>
+  </div>
+
+  <!-- ─── Screen 6: Revealing ───────────────────────────────────── -->
+  <div class="screen" id="screen-revealing">
+    <h2 id="reveal-title" class="reveal-title">Round Result</h2>
+
+    <div class="hint-display">
+      Clue: <strong id="reveal-hint-text"></strong>
+    </div>
+
+    <div class="spectrum-bar">
+      <span id="reveal-spectrum-left"  class="spectrum-label"></span>
+      <span id="reveal-spectrum-right" class="spectrum-label"></span>
+    </div>
+
+    <div class="dial-wrapper">
+      <div class="dial" id="reveal-dial">
+        <svg class="dial-zones" viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg">
+          <path class="zone-arc zone-1pt"  d=""/>
+          <path class="zone-arc zone-2pt"  d=""/>
+          <path class="zone-arc zone-3pt"  d=""/>
+          <path class="zone-arc zone-4pt"  d=""/>
+        </svg>
+        <div class="dial-needle target-needle" id="reveal-target-needle"></div>
+        <div class="dial-needle guess-needle"  id="reveal-guess-needle"></div>
+        <div class="opposing-arrow" id="reveal-opposing-arrow"></div>
+        <div class="dial-center-dot"></div>
+      </div>
+    </div>
+
+    <div class="score-breakdown">
+      <div class="score-row">
+        <span><span id="reveal-active-team-name">Active team</span> scored:</span>
+        <strong id="reveal-main-score" class="score-value"></strong>
+      </div>
+      <div class="score-row">
+        <span><span id="reveal-opposing-team-name">Opposing team</span> bonus:</span>
+        <strong id="reveal-opposing-bonus" class="score-value"></strong>
+      </div>
+    </div>
+
+    <div class="totals-bar">
+      <span class="total-left"><span id="reveal-label-left">Left</span>: <strong id="reveal-left-total">0</strong></span>
+      <span class="total-right"><span id="reveal-label-right">Right</span>: <strong id="reveal-right-total">0</strong></span>
+    </div>
+
+    <button id="btn-next-round">Next Round →</button>
+  </div>
+
+  <!-- ─── Screen 7: Game Over ───────────────────────────────────── -->
+  <div class="screen" id="screen-game-over">
+    <h1 id="game-over-winner" class="winner-title"></h1>
+    <div class="final-scores">
+      <div class="final-team left">
+        <h3 id="final-left-name">Left</h3>
+        <span id="final-left-score" class="big-score"></span>
+      </div>
+      <div class="final-team right">
+        <h3 id="final-right-name">Right</h3>
+        <span id="final-right-score" class="big-score"></span>
+      </div>
+    </div>
+    <button id="btn-play-again" class="hidden">Play Again</button>
+    <p id="gameover-waiting" class="status-text hidden">Waiting for host to restart…</p>
+  </div>
+
+  <footer class="fan-footer">
+    Inspired by Wavelength (Palm Court / Asmodee) — fan project, not affiliated.
+  </footer>
+
+  <script src="/static/main.js"></script>
+</body>
+</html>
