@@ -40,6 +40,25 @@ Open the printed URL in a browser. Share the URL (and room code) with other play
 
 ---
 
+## Online multiplayer
+
+By default the game only works on your local network. To play with friends online, you can expose your server via [ngrok](https://ngrok.com).
+
+1. [Sign up](https://ngrok.com) and [install ngrok](https://ngrok.com/download)
+2. Start the game server normally:
+   ```bash
+   uvicorn backend.server:app --port 8765
+   ```
+3. In a second terminal, run:
+   ```bash
+   ngrok http 8765
+   ```
+4. ngrok will print a public URL like `https://abc123.ngrok-free.app` — share that with your friends.
+
+> **Note:** The free ngrok tier is sufficient. The URL changes every time you restart ngrok.
+
+---
+
 ## How to play
 
 1. One player creates a room and shares the room code.
